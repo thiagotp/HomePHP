@@ -8,14 +8,14 @@ class Sql extends PDO{
   }
 
   //Esse método irá verificar quais os parâmetros existentes e seu valores
-  private function setParams($statment,$parameters = array()){
+  private function setParams($statement,$parameters = array()){
     foreach ($parameters as $key => $value) {
-      $this->setParam($key,$value);
+      $this->setParam($statement,$key,$value);
     }
   }
   //Esse método irá setar os parâmetros na query sql
-  private function setParam($statment, $key, $value){
-    $statment->bindParam($key,$value);
+  private function setParam($statement, $key, $value){
+    $statement->bindParam($key,$value);
   }
 
   //Esse método vai receber a query e vai tratar para relacionar os parametros na query
