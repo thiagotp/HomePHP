@@ -29,4 +29,13 @@ echo json_encode($search);
 //CARREGA UM USUÁRIO USANDO O LOGIN E A SENHA PARA IDENTIFICAR
 $root->login("login que existe no banco"," senha que existe no banco");
 
+//INSERE UM USUÁRIO NA TABELA POR MEIO DE UM PROCEDURE
+$aluno = new Usuario();
+
+$aluno->setDeslogin("aluno");
+$aluno->setDessenha("@feoa");
+$aluno->insert();
+
+echo $aluno;
+
 ?>

@@ -48,12 +48,8 @@ class Usuario{
     
     //verificando se existe alguma coisa na posição 0
     if(isset($result[0])){
-      $row = $result[0];
       //Setando as variáveis do objeto com as informações do banco de dados
-      $this->setIdusuario($row["idusuario"]);
-      $this->setDeslogin($row["deslogin"]);
-      $this->setDessenha($row["dessenha"]);
-      $this->setDtcadastro(new DateTime($row["dtcadastro"]));
+      $this->setDados($result[0]);
     }
   }
 
@@ -92,15 +88,32 @@ class Usuario{
     
     //verificando se existe alguma coisa na posição 0
     if(isset($result[0])){
-      $row = $result[0];
       //Setando as variáveis do objeto com as informações do banco de dados
-      $this->setIdusuario($row["idusuario"]);
-      $this->setDeslogin($row["deslogin"]);
-      $this->setDessenha($row["dessenha"]);
-      $this->setDtcadastro(new DateTime($row["dtcadastro"]));
+      $this->setDados($result[0]);
     } else {
       throw new Exception("Login e/ou senha inválidos");
       
+    }
+  }
+
+  public function setDados($dados){
+    $this->setIdusuario($row["idusuario"]);
+    $this->setDeslogin($row["deslogin"]);
+    $this->setDessenha($row["dessenha"]);
+    $this->setDtcadastro(new DateTime($row["dtcadastro"]));
+  }
+
+  public function insert(){
+    $sql = new SQL();
+
+    //Inserindo usando procedure
+    $result = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)",array(
+      ':LOGIN'=>$this->getDeslogin(),
+      ':PASSWORD'=>$this->getDessenha()
+    ));
+
+    if(count($result) > 0){
+      $this->setDados($result[0]);
     }
   }
 
