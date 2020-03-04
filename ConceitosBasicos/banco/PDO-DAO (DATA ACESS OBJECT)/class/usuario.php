@@ -42,7 +42,7 @@ class Usuario{
   public function loadById($id){
     $sql = new SQL();
 
-    $result = $sql->select("SELECT * FROM tb_usuarios WHERE idusuario = :ID",array(
+    $result = $sql->select("SELECT * FROM tb_usuarios WHERE idusuario = :ID;",array(
       ":ID"=>$id
     ));
     
@@ -66,6 +66,44 @@ class Usuario{
       "dtcadastro"=>$this->getDtcadastro()->format("d/m/y H:i:s")
     ));
   }
+
+  //Esse método sendo estático eu não preciso instaciar um objeto
+  public static function getList(){
+    $sql = new SQL();
+
+    $sql->select("SELECT * FROM tb_usuarios ORDER BY deslogin;");
+  }
+
+
+  public static function search($login){
+    $sql = new SQL();
+
+    return $sql->select("SELECT * FROM tb_usuarios WHERE deslogin LIKE :SEARCH ORDER BY deslogin",
+    array(':SEARCH'=>"%".$login."%"));
+  }
+
+  public function login($login,$password){
+    $sql = new SQL();
+
+    $result = $sql->select("SELECT * FROM tb_usuarios WHERE deslogin = :LOGIN AND dessenha = :SENHA;",array(
+      ":DESLOGIN"=>$login,
+      ":DESSENHA"=>$password
+    ));
+    
+    //verificando se existe alguma coisa na posição 0
+    if(isset($result[0])){
+      $row = $result[0];
+      //Setando as variáveis do objeto com as informações do banco de dados
+      $this->setIdusuario($row["idusuario"]);
+      $this->setDeslogin($row["deslogin"]);
+      $this->setDessenha($row["dessenha"]);
+      $this->setDtcadastro(new DateTime($row["dtcadastro"]));
+    } else {
+      throw new Exception("Login e/ou senha inválidos");
+      
+    }
+  }
+
 }
 
 ?>
