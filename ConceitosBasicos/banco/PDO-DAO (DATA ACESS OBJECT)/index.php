@@ -37,5 +37,23 @@ $aluno->setDessenha("@feoa");
 $aluno->insert();
 
 echo $aluno;
+//INSERE UM USUÁRIO NA TABELA POR MEIO DE UM PROCEDURE
+//COM CONSTRUTOR
+$aluno2 = new Usuario("thiago","fuejai");
+echo $aluno;
 
+//UPDATE DE UM USUARIO PELO ID
+$usuario = new Usuario();
+
+$usuario->loadById(2);
+
+$usuario->update("professoro","!@!#%%");
+
+
+//DELETANDO UM USUÁRIO PELO ID
+$usuario = new Usuario();
+
+$usuario->loadById(3);
+
+$usuario->delete();
 ?>

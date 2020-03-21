@@ -53,6 +53,40 @@ class Usuario{
     }
   }
 
+  public function delete(){
+    $sql = new Sql();
+
+    $sql->query("DELETE FROM tb_usuarios WHERE idusuario = :ID", array(
+      ':ID'=>$this->getIdusuario()
+    ));
+
+    //Apagando as informações do objeto após apagar o usuário do banco
+    $this->setIdusuario(0);
+    $this->setDeslogin("");
+    $this->setDessenha("");
+    $this->setDtcadastro(new DateTime());
+  }
+
+  public function update($login,$password){
+
+    $this->setDeslogin($login);
+    $this->setDessenha($password);
+
+    $sql = new Sql();
+
+    $sql->query("UPDATE tb_usuarios SET deslogin = :LOGIN, dessenha = :PASSWORD
+    WHERE idusuario = :ID", array(
+        ':LOGIN'=>$this->getDeslogin(),
+        ':PASSWORD'=>$this->getDessenha(),
+        ':ID'=>$this->getIdusuario()
+    ));
+  }
+
+  public function __construct($login="", $password=""){
+      $this->setDeslogin($login);
+      $this->setDessenha($password);
+  }           
+
   //Exibindo as informações do banco de dados
   public function __toString(){
     return json_encode(array(
@@ -97,10 +131,10 @@ class Usuario{
   }
 
   public function setDados($dados){
-    $this->setIdusuario($row["idusuario"]);
-    $this->setDeslogin($row["deslogin"]);
-    $this->setDessenha($row["dessenha"]);
-    $this->setDtcadastro(new DateTime($row["dtcadastro"]));
+    $this->setIdusuario($dados["idusuario"]);
+    $this->setDeslogin($dados["deslogin"]);
+    $this->setDessenha($dados["dessenha"]);
+    $this->setDtcadastro(new DateTime($dados["dtcadastro"]));
   }
 
   public function insert(){
